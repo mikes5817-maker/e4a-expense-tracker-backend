@@ -292,3 +292,21 @@ export class ReportService {
     });
   }
 }
+
+  async generateReportPdf(projectId: string, userId: string): Promise<{ pdf: Buffer; filename: string }> {
+    const project = await this.prisma.project.findUnique({
+      where: { id: projectId },
+      include: {
+        expenses: {
+          include: { receiptFile: true },
+          orderBy: { date: 'asc' },
+        },
+      },
+    });
+    if (!project) throw new NotFoundException('Project not found');
+    if (project.userId !== userId) throw new ForbiddenException();
+
+    const pdf = await this.generatePdf(project);
+    const filename = `Expense_Report_${project.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+    return { pdf, filename };
+  }

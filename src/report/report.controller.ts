@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, UseGuards, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ReportService } from './report.service';
+import { Response } from 'express';
 
 @ApiTags('Reports')
 @Controller('api/projects/:projectId/report')
@@ -18,6 +19,19 @@ export class ReportController {
     @CurrentUser() user: { id: string },
   ) {
     return this.reportService.getReportPreview(projectId, user.id);
+  }
+
+  @Get('download')
+  @ApiOperation({ summary: 'Download PDF report for a project' })
+  async download(
+    @Param('projectId') projectId: string,
+    @CurrentUser() user: { id: string },
+    @Res() res: Response,
+  ) {
+    const { pdf, filename } = await this.reportService.generateReportPdf(projectId, user.id);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(pdf);
   }
 
   @Post('send')

@@ -26,6 +26,12 @@ let ReportController = class ReportController {
     preview(projectId, user) {
         return this.reportService.getReportPreview(projectId, user.id);
     }
+    async download(projectId, user, res) {
+        const { pdf, filename } = await this.reportService.generateReportPdf(projectId, user.id);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(pdf);
+    }
     send(projectId, user) {
         return this.reportService.sendReport(projectId, user.id);
     }
@@ -40,6 +46,16 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], ReportController.prototype, "preview", null);
+__decorate([
+    (0, common_1.Get)('download'),
+    (0, swagger_1.ApiOperation)({ summary: 'Download PDF report for a project' }),
+    __param(0, (0, common_1.Param)('projectId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    __param(2, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ReportController.prototype, "download", null);
 __decorate([
     (0, common_1.Post)('send'),
     (0, swagger_1.ApiOperation)({ summary: 'Generate PDF report and email it' }),

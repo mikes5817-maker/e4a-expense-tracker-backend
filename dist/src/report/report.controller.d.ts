@@ -1,4 +1,5 @@
 import { ReportService } from './report.service';
+import { Response } from 'express';
 export declare class ReportController {
     private readonly reportService;
     constructor(reportService: ReportService);
@@ -21,6 +22,9 @@ export declare class ReportController {
             count: number;
         }[];
     }>;
+    download(projectId: string, user: {
+        id: string;
+    }, res: Response): Promise<void>;
     send(projectId: string, user: {
         id: string;
     }): Promise<{
