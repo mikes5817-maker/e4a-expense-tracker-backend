@@ -260,6 +260,24 @@ let ReportService = ReportService_1 = class ReportService {
             ],
         });
     }
+    async generateReportPdf(projectId, userId) {
+        const project = await this.prisma.project.findUnique({
+            where: { id: projectId },
+            include: {
+                expenses: {
+                    include: { receiptFile: true },
+                    orderBy: { date: 'asc' },
+                },
+            },
+        });
+        if (!project)
+            throw new common_1.NotFoundException('Project not found');
+        if (project.userId !== userId)
+            throw new common_1.ForbiddenException();
+        const pdf = await this.generatePdf(project);
+        const filename = `Expense_Report_${project.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+        return { pdf, filename };
+    }
 };
 exports.ReportService = ReportService;
 exports.ReportService = ReportService = ReportService_1 = __decorate([
@@ -267,22 +285,4 @@ exports.ReportService = ReportService = ReportService_1 = __decorate([
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         config_1.ConfigService])
 ], ReportService);
-async;
-generateReportPdf(projectId, string, userId, string);
-Promise < { pdf: Buffer, filename: string } > {
-    const: project = await this.prisma.project.findUnique({
-        where: { id: projectId },
-        include: {
-            expenses: {
-                include: { receiptFile: true },
-                orderBy: { date: 'asc' },
-            },
-        },
-    }),
-    if(, project) { }, throw: new common_1.NotFoundException('Project not found'),
-    if(project) { }, : .userId !== userId, throw: new common_1.ForbiddenException(),
-    const: pdf = await this.generatePdf(project),
-    const: filename = `Expense_Report_${project.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
-    return: { pdf, filename }
-};
 //# sourceMappingURL=report.service.js.map

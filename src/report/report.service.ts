@@ -291,8 +291,6 @@ export class ReportService {
       ],
     });
   }
-}
-
   async generateReportPdf(projectId: string, userId: string): Promise<{ pdf: Buffer; filename: string }> {
     const project = await this.prisma.project.findUnique({
       where: { id: projectId },
@@ -310,3 +308,4 @@ export class ReportService {
     const filename = `Expense_Report_${project.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
     return { pdf, filename };
   }
+}

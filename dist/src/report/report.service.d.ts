@@ -28,4 +28,8 @@ export declare class ReportService {
     }>;
     private generatePdf;
     private sendEmail;
+    generateReportPdf(projectId: string, userId: string): Promise<{
+        pdf: Buffer;
+        filename: string;
+    }>;
 }

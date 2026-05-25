@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Param, UseGuards, Res } from '@nestjs/common';
+import type { Response } from 'express';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ReportService } from './report.service';
-import { Response } from 'express';
 
 @ApiTags('Reports')
 @Controller('api/projects/:projectId/report')
