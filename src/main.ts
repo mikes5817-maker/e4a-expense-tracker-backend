@@ -18,7 +18,6 @@ async function bootstrap() {
     }),
   );
 
-  // No-cache headers for swagger
   const swaggerPath = 'api-docs';
   app.use(`/${swaggerPath}`, (req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -36,21 +35,10 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(swaggerPath, app, document, {
-    customSiteTitle: 'E4A Expense Tracker API',
-    customCss: `
-      .swagger-ui .topbar { display: none; }
-      .swagger-ui .info .title { color: #0077B6; font-size: 2rem; }
-      .swagger-ui .scheme-container { background: #f8f9fa; padding: 15px; border-radius: 8px; }
-      .swagger-ui .opblock-tag { font-size: 1.1rem; border-bottom: 2px solid #0077B6; }
-      .swagger-ui .opblock.opblock-post { border-color: #0077B6; background: rgba(0,119,182,0.05); }
-      .swagger-ui .opblock.opblock-get { border-color: #2E86AB; background: rgba(46,134,171,0.05); }
-      .swagger-ui .btn.execute { background-color: #0077B6; border-color: #0077B6; }
-    `,
-  });
+  SwaggerModule.setup(swaggerPath, app, document);
 
-  await app.listen(3000);
-  logger.log('Application running on port 3000');
-  logger.log(`Swagger docs at http://localhost:3000/${swaggerPath}`);
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
+  logger.log(`Application running on port ${port}`);
 }
 bootstrap();
