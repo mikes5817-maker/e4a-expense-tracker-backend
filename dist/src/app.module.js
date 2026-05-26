@@ -15,6 +15,7 @@ const projects_module_1 = require("./projects/projects.module");
 const expenses_module_1 = require("./expenses/expenses.module");
 const upload_module_1 = require("./upload/upload.module");
 const report_module_1 = require("./report/report.module");
+const time_report_module_1 = require("./time-report/time-report.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,6 +29,7 @@ exports.AppModule = AppModule = __decorate([
             expenses_module_1.ExpensesModule,
             upload_module_1.UploadModule,
             report_module_1.ReportModule,
+            time_report_module_1.TimeReportModule,
         ],
     })
 ], AppModule);

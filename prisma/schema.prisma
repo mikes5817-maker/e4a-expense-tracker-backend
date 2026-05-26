@@ -24,9 +24,10 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
-  projects  Project[]
-  expenses  Expense[]
-  files     File[]
+  projects     Project[]
+  expenses     Expense[]
+  files        File[]
+  timeReports  TimeReport[]
 
   @@map("users")
 }
@@ -86,4 +87,60 @@ model Expense {
   @@index([userId])
   @@index([receiptFileId])
   @@map("expenses")
+}
+
+model TimeReport {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String      @map("user_id") @db.Uuid
+  weekStart   DateTime    @map("week_start")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employees   TimeEmployee[]
+
+  @@index([userId])
+  @@map("time_reports")
+}
+
+model TimeEmployee {
+  id           String     @id @default(uuid()) @db.Uuid
+  timeReportId String     @map("time_report_id") @db.Uuid
+  name         String
+  employeeId   String?    @map("employee_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  timeReport   TimeReport @relation(fields: [timeReportId], references: [id], onDelete: Cascade)
+  days         TimeDay[]
+
+  @@index([timeReportId])
+  @@map("time_employees")
+}
+
+model TimeDay {
+  id             String      @id @default(uuid()) @db.Uuid
+  timeEmployeeId String      @map("time_employee_id") @db.Uuid
+  dayName        String      @map("day_name")
+  date           DateTime
+  perDiem        Boolean     @default(false) @map("per_diem")
+
+  timeEmployee   TimeEmployee @relation(fields: [timeEmployeeId], references: [id], onDelete: Cascade)
+  shifts         TimeShift[]
+
+  @@index([timeEmployeeId])
+  @@map("time_days")
+}
+
+model TimeShift {
+  id         String   @id @default(uuid()) @db.Uuid
+  timeDayId  String   @map("time_day_id") @db.Uuid
+  projectId  String?  @map("project_id")
+  timeIn     Int?     @map("time_in")
+  timeOut    Int?     @map("time_out")
+  shiftNum   Int      @default(1) @map("shift_num")
+
+  timeDay    TimeDay  @relation(fields: [timeDayId], references: [id], onDelete: Cascade)
+
+  @@index([timeDayId])
+  @@map("time_shifts")
 }
