@@ -10,9 +10,9 @@ import * as fs from 'fs';
 const PDFDocument = require('pdfkit');
 
 const CATEGORY_LABELS: Record<string, string> = {
-  GasolinaDiesel: 'Gasolina/Diesel',
+  Gas/Diesel: 'Gasolina/Diesel',
   Hotel: 'Hotel',
-  Herramientas: 'Herramientas',
+  Tools: 'Tools',
   Material: 'Material',
   Other: 'Otro',
 };

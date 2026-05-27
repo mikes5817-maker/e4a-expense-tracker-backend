@@ -43,12 +43,19 @@ const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const PDFDocument = require('pdfkit');
 const CATEGORY_LABELS = {
-    GasolinaDiesel: 'Gasolina/Diesel',
-    Hotel: 'Hotel',
-    Herramientas: 'Herramientas',
-    Material: 'Material',
-    Other: 'Otro',
-};
+    Gas
+} / Diesel;
+'Gasolina/Diesel',
+    Hotel;
+'Hotel',
+    Tools;
+'Tools',
+    Material;
+'Material',
+    Other;
+'Otro',
+;
+;
 function getCategoryLabel(category, customCategory) {
     if (category === 'Other' && customCategory)
         return customCategory;
